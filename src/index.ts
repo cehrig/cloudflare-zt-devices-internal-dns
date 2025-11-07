@@ -119,13 +119,18 @@ async function get_ip(account_id: string, device_id: string, api_token: string):
         return null;
     }
 
-    let json: any = await response.json();
+    try {
+        let json: any = await response.json();
 
-    if (json.success !== true) {
+        if (json.success !== true) {
+            return null;
+        }
+
+        return json.result.metadata.ipv4;
+    } catch (ex) {
+        console.log(`${device_id} has empty metadata block`);
         return null;
     }
-
-    return json.result.metadata.ipv4;
 }
 
 // Returns a zone's name from a given zone ID
